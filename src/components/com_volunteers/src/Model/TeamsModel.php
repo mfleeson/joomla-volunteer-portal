@@ -217,7 +217,7 @@ class TeamsModel extends ListModel
         $parent = $this->getState('filter.parent');
 
         if (is_array($parent)) {
-            $query->where('a.parent_id IN (' . implode($parent, ',') . ')');
+            $query->where('a.parent_id IN (' . implode(',', $parent) . ')');
         }
 
         if (is_numeric($parent) && ($parent > 0)) {

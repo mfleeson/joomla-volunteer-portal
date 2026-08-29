@@ -100,6 +100,7 @@ class HtmlView extends BaseHtmlView
     {
         /** @var TeamsModel $model */
         $model               = $this->getModel();
+        #$this->setUseExceptions(true);
         $this->state         = $model->getState();
         $this->items         = $model->getItems();
         $this->pagination    = $model->getPagination();

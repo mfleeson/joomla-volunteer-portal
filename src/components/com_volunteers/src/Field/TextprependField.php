@@ -47,6 +47,6 @@ class TextprependField extends TextField
         $html[] = parent::getInput();
         $html[] = '</div>';
 
-        return implode($html);
+        return implode('', $html);
     }
 }

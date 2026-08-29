@@ -137,7 +137,7 @@ class TeamModel extends AdminModel
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
 
-        $table->set('title', htmlspecialchars_decode($table->get('title'), ENT_QUOTES));
+        $table->set('title', htmlspecialchars_decode((string) $table->get('title'), ENT_QUOTES));
         $table->set('alias', ApplicationHelper::stringURLSafe($table->get('alias')));
 
         if (empty($table->get('alias'))) {
@@ -185,8 +185,8 @@ class TeamModel extends AdminModel
         $app = Factory::getApplication();
 
         // Alter the title for save as copy
-        if ($app->input->get('task') == 'save2copy') {
-            list($name, $alias) = $this->generateNewTitle(0, $data['alias'], $data['title']);
+        if ($app->getInput()->get('task') == 'save2copy') {
+            [$name, $alias] = $this->generateNewTitle(0, $data['alias'], $data['title']);
             $data['title']      = $name;
             $data['alias']      = $alias;
             $data['state']      = 0;
@@ -196,9 +196,7 @@ class TeamModel extends AdminModel
         if ($data['date_ended']) {
             $members    = $this->getTeamMembers($data['id']);
             $membersIds = array_map(
-                function ($member) {
-                    return $member->id;
-                },
+                fn($member) => $member->id,
                 $members->active
             );
 
@@ -489,9 +487,7 @@ class TeamModel extends AdminModel
 
                 return $data;
             } catch (Exception $e) {
-                $this->setError($e);
-
-                return false;
+                throw new \Exception($e);
             }
         }
 

@@ -31,7 +31,7 @@ class HtmlView extends BaseHtmlView
     protected mixed $state;
     protected mixed $item;
     protected mixed $form;
-    protected User|null $user;
+    protected User|null $user = null;
 
     /**
      * Execute and display a template script.
@@ -48,6 +48,7 @@ class HtmlView extends BaseHtmlView
         /** @var RoleModel $model */
 
         $model      = $this->getModel();
+        $model->setUseExceptions(true);
         $this->item = $model->getItem();
 
         $this->state = $model->getState();
@@ -79,7 +80,7 @@ class HtmlView extends BaseHtmlView
     protected function manipulateForm()
     {
         $app      = Factory::getApplication();
-        $jinput   = $app->input;
+        $jinput   = $app->getInput();
         $memberId = $jinput->getInt('id');
         $this->form->setFieldAttribute('team', 'readonly', 'true');
 

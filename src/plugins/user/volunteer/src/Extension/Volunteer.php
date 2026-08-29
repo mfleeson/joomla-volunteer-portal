@@ -10,6 +10,7 @@
 
 namespace Joomla\Plugin\User\Volunteer\Extension;
 
+use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Database\DatabaseAwareTrait;
@@ -23,7 +24,7 @@ use Joomla\Database\DatabaseAwareTrait;
  *
  * @since  4.0.0
  */
-final class Volunteer extends CMSPlugin
+final class Volunteer extends CMSPlugin implements SubscriberInterface
 {
     use DatabaseAwareTrait;
 
@@ -75,10 +76,10 @@ final class Volunteer extends CMSPlugin
     {
         $db    = $this->getDatabase();
         $query = $db->getQuery(true)
-                          ->select($this->db->quoteName('members.id'))
-                          ->from($this->db->quoteName('#__volunteers_members', 'members'))
-                          ->leftJoin($this->db->quoteName('#__volunteers_volunteers') . ' AS volunteers ON ' . $this->db->quoteName('volunteers.id') . ' = ' . $this->db->quoteName('members.volunteer'))
-                          ->where($this->db->quoteName('volunteers.user_id') . ' = ' . $this->db->quote($user['id']));
+                          ->select($this->getDatabase()->quoteName('members.id'))
+                          ->from($this->getDatabase()->quoteName('#__volunteers_members', 'members'))
+                          ->leftJoin($this->getDatabase()->quoteName('#__volunteers_volunteers') . ' AS volunteers ON ' . $this->getDatabase()->quoteName('volunteers.id') . ' = ' . $this->getDatabase()->quoteName('members.volunteer'))
+                          ->where($this->getDatabase()->quoteName('volunteers.user_id') . ' = ' . $this->getDatabase()->quote($user['id']));
 
         $volunteer = $db->setQuery($query)->loadResult();
 
@@ -88,5 +89,9 @@ final class Volunteer extends CMSPlugin
         }
 
         return true;
+    }
+    public static function getSubscribedEvents(): array
+    {
+        return ['onUserAfterDelete' => 'onUserAfterDelete', 'onUserBeforeDelete' => 'onUserBeforeDelete'];
     }
 }

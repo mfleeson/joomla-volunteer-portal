@@ -10,6 +10,7 @@
 
 namespace Joomla\Plugin\System\JoomlaIdentityVolunteers\Extension;
 
+use Joomla\Event\SubscriberInterface;
 use Exception;
 use InvalidArgumentException;
 use Joomla\CMS\Application\ApplicationHelper;
@@ -27,7 +28,7 @@ use Joomla\Database\DatabaseAwareTrait;
  *
  * @since  4.0.0
  */
-final class JoomlaIdentityVolunteers extends CMSPlugin
+final class JoomlaIdentityVolunteers extends CMSPlugin implements SubscriberInterface
 {
     use DatabaseAwareTrait;
 
@@ -157,9 +158,13 @@ final class JoomlaIdentityVolunteers extends CMSPlugin
         Log::add(json_encode($volunteer), Log::INFO, 'idpjvp');
 
         try {
-            $this->db->insertObject('#__volunteers_volunteers', $volunteer, 'user_id');
-        } catch (Exception $e) {
-            $this->db->updateObject('#__volunteers_volunteers', $volunteer, ['user_id']);
+            $this->getDatabase()->insertObject('#__volunteers_volunteers', $volunteer, 'user_id');
+        } catch (Exception) {
+            $this->getDatabase()->updateObject('#__volunteers_volunteers', $volunteer, ['user_id']);
         }
+    }
+    public static function getSubscribedEvents(): array
+    {
+        return ['onProcessIdentity' => 'onProcessIdentity'];
     }
 }

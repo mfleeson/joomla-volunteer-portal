@@ -10,6 +10,8 @@
 
 namespace Joomla\Plugin\System\Volunteers\Extension;
 
+use Joomla\Event\SubscriberInterface;
+
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
@@ -28,7 +30,7 @@ use Joomla\Component\Volunteers\Administrator\Model\VolunteerModel;
  *
  * @since  4.0.0
  */
-final class Volunteers extends CMSPlugin
+final class Volunteers extends CMSPlugin implements SubscriberInterface
 {
     /**
      * Affects constructor behavior. If true, language files will be loaded automatically.
@@ -129,5 +131,9 @@ final class Volunteers extends CMSPlugin
         }
 
         return true;
+    }
+    public static function getSubscribedEvents(): array
+    {
+        return ['onAfterRender' => 'onAfterRender', 'onAfterRoute' => 'onAfterRoute'];
     }
 }

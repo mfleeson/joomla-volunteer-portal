@@ -314,31 +314,14 @@ class VolunteerModel extends AdminModel
         // Check the url fields
         foreach ($data as $field => $value) {
             if (in_array($field, $this->url_fields)) {
-                switch ($field) {
-                    case 'github':
-                        $url = 'https://github.com/' . $value;
-                        break;
-
-                    case 'twitter':
-                        $url = 'https://twitter.com/' . $value;
-                        break;
-
-                    case 'certification':
-                        $url = 'https://exam.joomla.org/directory/user/' . $value;
-                        break;
-
-                    case 'joomladocs':
-                        $url = 'https://docs.joomla.org/User:' . $value;
-                        break;
-
-                    case 'crowdin':
-                        $url = 'https://crowdin.com/profile/' . $value;
-                        break;
-
-                    default:
-                        $url = $value;
-                        break;
-                }
+                $url = match ($field) {
+                    'github' => 'https://github.com/' . $value,
+                    'twitter' => 'https://twitter.com/' . $value,
+                    'certification' => 'https://exam.joomla.org/directory/user/' . $value,
+                    'joomladocs' => 'https://docs.joomla.org/User:' . $value,
+                    'crowdin' => 'https://crowdin.com/profile/' . $value,
+                    default => $value,
+                };
 
                 if ($value) {
                     try {
@@ -361,8 +344,8 @@ class VolunteerModel extends AdminModel
         $dataUser = [
             'name'      => $data['name'],
             'username'  => PunycodeHelper::emailToPunycode($data['email']),
-            'password'  => (isset($data['password1'])) ? $data['password1'] : '',
-            'password2' => (isset($data['password2'])) ? $data['password2'] : '',
+            'password'  => $data['password1'] ?? '',
+            'password2' => $data['password2'] ?? '',
             'email'     => PunycodeHelper::emailToPunycode($data['email']),
         ];
 

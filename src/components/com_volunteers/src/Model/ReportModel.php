@@ -174,7 +174,7 @@ class ReportModel extends AdminModel
         $app = Factory::getApplication();
 
         // Alter the title for save as copy
-        if ($app->input->get('task') == 'save2copy') {
+        if ($app->getInput()->get('task') == 'save2copy') {
             [$name, $alias]     = $this->generateNewTitle(0, $data['alias'], $data['title']);
             $data['title']      = $name;
             $data['alias']      = $alias;
@@ -258,7 +258,7 @@ class ReportModel extends AdminModel
         }
 
         // Load state from the request userState on edit or from the passed variable on default
-        $id = $app->input->get('id');
+        $id = $app->getInput()->get('id');
         $app->setUserState('com_volunteers.edit.report.id', $id);
 
         $this->setState('report.id', $id);

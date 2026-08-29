@@ -6,10 +6,9 @@
  *
  * @copyright   (C) 2023 Open Source Matters, Inc. <https://www.joomla.org>
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
-
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  */
-
+use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -25,7 +24,7 @@ use Joomla\Database\DatabaseDriver;
  *
  * @since  4.0.0
  */
-class PlgSampledataJvp extends CMSPlugin
+class PlgSampledataJvp extends CMSPlugin implements SubscriberInterface
 {
     /**
      * Database object
@@ -262,15 +261,15 @@ class PlgSampledataJvp extends CMSPlugin
 
         foreach ($queries as $query) {
             // Trim any whitespace.
-            $query = trim($query);
+            $query = trim((string) $query);
 
             // If the query isn't empty and is not a MySQL or PostgreSQL comment, execute it.
             if (!empty($query) && ($query[0] != '#') && ($query[0] != '-')) {
                 // Execute the query.
-                $this->db->setQuery($query);
+                $this->getDatabase()->setQuery($query);
 
                 try {
-                    $this->db->execute();
+                    $this->getDatabase()->execute();
                 } catch (\RuntimeException $e) {
                     Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
 
@@ -307,7 +306,7 @@ class PlgSampledataJvp extends CMSPlugin
         $query = preg_replace("/\n\--[^\n]*/", '', "\n" . $query);
 
         // Find function.
-        $funct = explode('CREATE OR REPLACE FUNCTION', $query);
+        $funct = explode('CREATE OR REPLACE FUNCTION', (string) $query);
 
         // Save sql before function and parse it.
         $query = $funct[0];
@@ -344,5 +343,9 @@ class PlgSampledataJvp extends CMSPlugin
         }
 
         return $queries;
+    }
+    public static function getSubscribedEvents(): array
+    {
+        return ['onSampledataGetOverview' => 'onSampledataGetOverview', 'onAjaxSampledataApplyStep1' => 'onAjaxSampledataApplyStep1', 'onAjaxSampledataApplyStep2' => 'onAjaxSampledataApplyStep2', 'onAjaxSampledataApplyStep3' => 'onAjaxSampledataApplyStep3', 'onAjaxSampledataApplyStep4' => 'onAjaxSampledataApplyStep4', 'onAjaxSampledataApplyStep5' => 'onAjaxSampledataApplyStep5', 'onAjaxSampledataApplyStep6' => 'onAjaxSampledataApplyStep6', 'onAjaxSampledataApplyStep7' => 'onAjaxSampledataApplyStep7', 'onAjaxSampledataApplyStep8' => 'onAjaxSampledataApplyStep8'];
     }
 }

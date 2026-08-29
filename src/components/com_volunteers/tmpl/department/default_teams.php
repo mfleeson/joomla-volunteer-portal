@@ -54,7 +54,7 @@ use Joomla\Component\Volunteers\Site\Helper\VolunteersHelper;
                         foreach ($team->leader as $volunteer) : ?>
                             <a class="tip hasTooltip" title="<?php echo $volunteer->volunteer_name; ?>"
                                href="<?php echo Route::_('index.php?option=com_volunteers&view=volunteer&id=' . $volunteer->volunteer) ?>">
-                                <?php echo VolunteersHelper::image($volunteer->volunteer_image, 'small', false, is_null($volunteer->volunteer_name) ? '' : $volunteer->volunteer_name); ?>
+                                <?php echo VolunteersHelper::image($volunteer->volunteer_image, 'small', false, $volunteer->volunteer_name ?? ''); ?>
                             </a>
                         <?php endforeach;
                     }
@@ -65,7 +65,7 @@ use Joomla\Component\Volunteers\Site\Helper\VolunteersHelper;
                         foreach ($team->assistantleader as $volunteer) : ?>
                             <a class="tip hasTooltip" title="<?php echo $volunteer->volunteer_name; ?>"
                                href="<?php echo Route::_('index.php?option=com_volunteers&view=volunteer&id=' . $volunteer->volunteer) ?>">
-                                <?php echo VolunteersHelper::image($volunteer->volunteer_image, 'small', false, is_null($volunteer->volunteer_name) ? '' : $volunteer->volunteer_name); ?>
+                                <?php echo VolunteersHelper::image($volunteer->volunteer_image, 'small', false, $volunteer->volunteer_name ?? ''); ?>
                             </a>
                         <?php endforeach;
                     }

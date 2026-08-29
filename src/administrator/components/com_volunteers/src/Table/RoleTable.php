@@ -89,18 +89,18 @@ class RoleTable extends Table implements VersionableTableInterface, TaggableTabl
     public function check()
     {
         // check for valid name
-        if (trim($this->get('title')) == '') {
+        if (trim((string) ($this->title ?? null)) == '') {
             throw new Exception(Text::_('COM_VOLUNTEERS_ERR_TABLES_NAME'));
         }
 
-        if (empty($this->get('alias'))) {
-            $this->set('alias', $this->get('title'));
+        if (empty($this->alias ?? null)) {
+            $this->alias = $this->title ?? null;
         }
 
-        $this->set('alias', ApplicationHelper::stringURLSafe($this->get('alias')));
+        $this->alias = ApplicationHelper::stringURLSafe($this->alias ?? null);
 
-        if (trim(str_replace('-', '', $this->get('alias'))) == '') {
-            $this->set('alias', Factory::getDate()->format("Y-m-d-H-i-s"));
+        if (trim(str_replace('-', '', $this->alias ?? null)) == '') {
+            $this->alias = Factory::getDate()->format("Y-m-d-H-i-s");
         }
 
         return true;
@@ -133,21 +133,21 @@ class RoleTable extends Table implements VersionableTableInterface, TaggableTabl
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
 
-        $this->set('modified', $date->toSql());
+        $this->modified = $date->toSql();
 
         if ($this->getId()) {
             // Existing item
 
-            $this->set('modified_by', $user->id);
+            $this->modified_by = $user->id;
         } else {
             // New item. An item created and created_by field can be set by the user,
             // so we don't touch either of these if they are set.
-            if (!(int) $this->get('created')) {
-                $this->set('created', $date->toSql());
+            if (!(int) ($this->created ?? null)) {
+                $this->created = $date->toSql();
             }
 
-            if (empty($this->get('created_by'))) {
-                $this->set('created_by', $user->id);
+            if (empty($this->created_by ?? null)) {
+                $this->created_by = $user->id;
             }
         }
 
@@ -169,7 +169,7 @@ class RoleTable extends Table implements VersionableTableInterface, TaggableTabl
 
         if ($public) {
             foreach ($vars as $key => $value) {
-                if (str_starts_with($key, '_')) {
+                if (str_starts_with((string) $key, '_')) {
                     unset($vars[$key]);
                 }
             }

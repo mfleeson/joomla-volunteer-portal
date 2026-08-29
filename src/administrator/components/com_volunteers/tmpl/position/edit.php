@@ -5,7 +5,7 @@
  * @copyright  Copyright (C) 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
+/** @var \Joomla\Component\Volunteers\Administrator\View\Position\HtmlView $this */
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Language\Text;

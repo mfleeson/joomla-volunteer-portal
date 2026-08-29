@@ -142,7 +142,7 @@ class ReportController extends FormController
         $this->checkToken();
 
         // Get variables
-        $reportId     = ($this->input->getInt('id')) ? $this->input->getInt('id') : null;
+        $reportId     = $this->input->getInt('id') ?: null;
         $report       = $this->getModel()->getItem($reportId);
         $departmentId = (int) ($reportId) ? $report->department : $this->app->getUserState('com_volunteers.edit.report.departmentid');
         $teamId       = (int) ($reportId) ? $report->team : $this->app->getUserState('com_volunteers.edit.report.teamid');

@@ -199,7 +199,7 @@ class DepartmentModel extends AdminModel
         $teamLeads = $this->getAllDepartmentTeamLeads(array_keys($teamsById));
         foreach ($teamLeads as $teamentries) {
             foreach ($teamentries as $lead) {
-                if (!str_contains($lead->position_title, 'Assistant')) {
+                if (!str_contains((string) $lead->position_title, 'Assistant')) {
                     $teamsById[$lead->team]->leader[] = $lead;
                 } else {
                     $teamsById[$lead->team]->assistantleader[] = $lead;
@@ -343,7 +343,7 @@ class DepartmentModel extends AdminModel
     {
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
-        $table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
+        $table->title = htmlspecialchars_decode((string) $table->title, ENT_QUOTES);
         $table->alias = ApplicationHelper::stringURLSafe($table->alias);
         if (empty($table->alias)) {
             $table->alias = ApplicationHelper::stringURLSafe($table->title);
@@ -388,8 +388,8 @@ class DepartmentModel extends AdminModel
     {
         $app = Factory::getApplication();
         // Alter the title for save as copy
-        if ($app->input->get('task') == 'save2copy') {
-            list($name, $alias) = $this->generateNewTitle(0, $data['alias'], $data['title']);
+        if ($app->getInput()->get('task') == 'save2copy') {
+            [$name, $alias] = $this->generateNewTitle(0, $data['alias'], $data['title']);
             $data['title']      = $name;
             $data['alias']      = $alias;
             $data['state']      = 0;
@@ -429,7 +429,7 @@ class DepartmentModel extends AdminModel
      *
      * @param   null  $pk  The id of the primary key.
      *
-     * @return CMSObject|boolean Object on success
+     * @return stdClass|boolean Object on success
      *
      * @since  4.0.0
      * @throws Exception

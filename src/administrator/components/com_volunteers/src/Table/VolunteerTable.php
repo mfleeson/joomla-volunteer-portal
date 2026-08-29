@@ -114,7 +114,7 @@ class VolunteerTable extends Table implements VersionableTableInterface, Taggabl
 
         // Delete the Joomla User
 
-        $user = Factory::getContainer()->get('user.factory')->loadUserById($this->get('user_id'));
+        $user = Factory::getContainer()->get('user.factory')->loadUserById($this->user_id ?? null);
 
 
         if (!$user->delete()) {
@@ -151,27 +151,27 @@ class VolunteerTable extends Table implements VersionableTableInterface, Taggabl
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
 
-        $this->set('modified', $date->toSql());
+        $this->modified = $date->toSql();
 
         if ($this->getId()) {
             // Existing item
 
-            $this->set('modified_by', $user->id);
+            $this->modified_by = $user->id;
         } else {
             // New item. An item created and created_by field can be set by the user,
             // so we don't touch either of these if they are set.
-            if (!(int) $this->get('created')) {
-                $this->set('created', $date->toSql());
+            if (!(int) ($this->created ?? null)) {
+                $this->created = $date->toSql();
             }
 
             if (empty($this->created_by)) {
-                $this->set('created_by', $user->id);
+                $this->created_by = $user->id;
             }
         }
 
         // Birthday format
-        if ($this->get('birthday') && $this->get('birthday') != '0000-00-00 00:00:00') {
-            $this->set('birthday', Factory::getDate('0000-' . $this->get('birthday'))->format('Y-m-d'));
+        if (($this->birthday ?? null) && ($this->birthday ?? null) != '0000-00-00 00:00:00') {
+            $this->birthday = Factory::getDate('0000-' . ($this->birthday ?? null))->format('Y-m-d');
         }
 
         return parent::store($updateNulls);
@@ -191,7 +191,7 @@ class VolunteerTable extends Table implements VersionableTableInterface, Taggabl
 
         if ($public) {
             foreach ($vars as $key => $value) {
-                if (str_starts_with($key, '_')) {
+                if (str_starts_with((string) $key, '_')) {
                     unset($vars[$key]);
                 }
             }

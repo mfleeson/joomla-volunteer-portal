@@ -39,7 +39,7 @@ class HtmlView extends BaseHtmlView
     protected mixed $state;
     protected mixed $item;
     protected mixed $form;
-    protected User|null $user;
+    protected User|null $user = null;
     protected stdClass $acl;
 
     protected string $share;
@@ -60,6 +60,7 @@ class HtmlView extends BaseHtmlView
         /** @var ReportModel $model */
 
         $model      = $this->getModel();
+        $model->setUseExceptions(true);
         $this->item = $model->getItem();
 
         $this->state = $model->getState();
@@ -109,7 +110,7 @@ class HtmlView extends BaseHtmlView
     protected function manipulateForm()
     {
         $app      = Factory::getApplication();
-        $jinput   = $app->input;
+        $jinput   = $app->getInput();
         $reportId = $jinput->getInt('id');
 
         // Disable fields

@@ -101,6 +101,7 @@ class HtmlView extends BaseHtmlView
     {
         /** @var VolunteersModel $model */
         $model               = $this->getModel();
+        #$this->setUseExceptions(true);
         $this->state         = $model->getState();
         $this->items         = $model->getItems();
         $this->pagination    = $model->getPagination();

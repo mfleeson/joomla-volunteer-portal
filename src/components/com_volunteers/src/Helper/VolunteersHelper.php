@@ -542,6 +542,7 @@ class VolunteersHelper
             $text .= $countries[$country];
         }
 
+        if($text == '') { $text = 'Unknown';}
         return $text;
     }
 

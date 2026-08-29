@@ -114,7 +114,7 @@ try {
                         <a href="<?php echo $item->link; ?>"><?php echo $item->name; ?></a>
                     </p>
                     <p>
-                        <?php echo StringHelper::truncate(strip_tags(trim($item->description)), 380); ?>
+                        <?php echo StringHelper::truncate(strip_tags(trim((string) $item->description)), 380); ?>
                     </p>
                     <a href="<?php echo Route::_('index.php?option=com_volunteers&view=report&id=' . $item->id) ?>" class="volunteers_btn">
                         <col- class="icon-chevron-right"></col->

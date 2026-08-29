@@ -48,6 +48,7 @@ class HtmlView extends BaseHtmlView
         /** @var RolesModel $model */
 
         $model       = $this->getModel();
+        $model->setUseExceptions(true);
         $this->items = $model->getOpenRoles();
 
         $errors = $model->getErrors();

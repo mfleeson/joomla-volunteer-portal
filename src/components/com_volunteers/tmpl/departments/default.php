@@ -84,7 +84,7 @@ try {
                                     <?php if (!empty($item->members)) {
                                         foreach ($item->members as $member) : ?>
                                 <a class="tip hasTooltip" title="<?php echo $member->volunteer_name; ?>" href="<?php echo Route::_('index.php?option=com_volunteers&view=volunteer&id=' . $member->volunteer) ?>">
-                                                                            <?php echo VolunteersHelper::image($member->volunteer_image, 'small', false, is_null($member->volunteer_name) ? '' : $member->volunteer_name); ?>
+                                                                            <?php echo VolunteersHelper::image($member->volunteer_image, 'small', false, $member->volunteer_name ?? ''); ?>
                                 </a>
                                                                             <?php $i++;
                                                                             if ($i == 14) {

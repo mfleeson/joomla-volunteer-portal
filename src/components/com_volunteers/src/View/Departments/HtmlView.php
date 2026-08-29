@@ -49,6 +49,7 @@ class HtmlView extends BaseHtmlView
         /** @var DepartmentsModel $model */
 
         $model            = $this->getModel();
+        $model->setUseExceptions(true);
         $this->state      = $model->getState();
         $this->items      = $model->getItems();
         $this->pagination = $model->getPagination();

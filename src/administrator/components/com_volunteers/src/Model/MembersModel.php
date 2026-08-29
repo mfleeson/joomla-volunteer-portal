@@ -44,7 +44,7 @@ class MembersModel extends ListModel
                     $item->address = true;
                 }
 
-                if ((str_contains($item->user_email, 'identity.joomla.org'))) {
+                if ((str_contains((string) $item->user_email, 'identity.joomla.org'))) {
                     $item->guest = true;
                 }
 
@@ -120,10 +120,10 @@ class MembersModel extends ListModel
         $search = $this->getState('filter.search');
 
         if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
+            if (stripos((string) $search, 'id:') === 0) {
+                $query->where('a.id = ' . (int) substr((string) $search, 3));
             } else {
-                $search = $db->quote('%' . str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
+                $search = $db->quote('%' . str_replace(' ', '%', $db->escape(trim((string) $search), true) . '%'));
                 $query->where('user.name LIKE ' . $search);
             }
         }

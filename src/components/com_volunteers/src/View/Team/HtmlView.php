@@ -36,7 +36,7 @@ class HtmlView extends BaseHtmlView
     protected mixed $state;
     protected mixed $item;
     protected mixed $form;
-    protected User|null $user;
+    protected User|null $user = null;
     protected stdClass $acl;
 
 
@@ -56,6 +56,7 @@ class HtmlView extends BaseHtmlView
         /** @var TeamModel $model */
 
         $model      = $this->getModel();
+        $model->setUseExceptions(true);
         $this->item = $model->getItem();
 
         $this->state          = $model->getState();
@@ -99,7 +100,7 @@ class HtmlView extends BaseHtmlView
     {
         // Manipulate frontend edit form
         $app    = Factory::getApplication();
-        $teamId = $app->input->getInt('id');
+        $teamId = $app->getInput()->getInt('id');
 
         // Clear date ended field if not set
         if ($this->item->date_ended == '0000-00-00') {

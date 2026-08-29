@@ -128,7 +128,7 @@ class ReportModel extends AdminModel
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
 
-        $table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
+        $table->title = htmlspecialchars_decode((string) $table->title, ENT_QUOTES);
         $table->alias = ApplicationHelper::stringURLSafe($table->alias);
 
         if (empty($table->alias)) {
@@ -177,8 +177,8 @@ class ReportModel extends AdminModel
         $app = Factory::getApplication();
 
         // Alter the title for save as copy
-        if ($app->input->get('task') == 'save2copy') {
-            list($name, $alias) = $this->generateNewTitle(0, $data['alias'], $data['title']);
+        if ($app->getInput()->get('task') == 'save2copy') {
+            [$name, $alias] = $this->generateNewTitle(0, $data['alias'], $data['title']);
             $data['title']      = $name;
             $data['alias']      = $alias;
             $data['state']      = 0;

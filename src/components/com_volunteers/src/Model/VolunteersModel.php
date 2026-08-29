@@ -8,8 +8,8 @@
 
 namespace Joomla\Component\Volunteers\Site\Model;
 
+use Joomla\Database\Exception\ExecutionFailureException;
 use Exception;
-use JDatabaseExceptionExecuting;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
@@ -40,34 +40,20 @@ class VolunteersModel extends ListModel
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = [
-                'id',
-                'a.id',
-                'alias',
-                'a.alias',
-                'checked_out',
-                'a.checked_out',
-                'checked_out_time',
-                'a.checked_out_time',
-                'state',
-                'a.state',
-                'created',
-                'a.created',
-                'created_by',
-                'a.created_by',
-                'ordering',
-                'a.ordering',
-                'featured',
-                'a.featured',
-                'username',
-                'user.username',
-                'modified',
-                'a.modified',
-                'num_teams',
-                'num_teams',
-                'spam',
-                'a.spam',
-                'birthday',
-                'a.birthday',
+                    'id', 'a.id',
+                    'alias', 'a.alias',
+                    'checked_out', 'a.checked_out',
+                    'checked_out_time', 'a.checked_out_time',
+                    'state', 'a.state',
+                    'created', 'a.created',
+                    'created_by', 'a.created_by',
+                    'ordering', 'a.ordering',
+                    'featured', 'a.featured',
+                    'username', 'user.username',
+                    'modified', 'a.modified',
+                    'num_teams', 'num_teams',
+                    'spam', 'a.spam',
+                    'birthday', 'a.birthday'
             ];
         }
 
@@ -119,10 +105,10 @@ class VolunteersModel extends ListModel
         $search = $this->getState('filter.search');
 
         if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
+            if (stripos((string) $search, 'id:') === 0) {
+                $query->where('a.id = ' . (int) substr((string) $search, 3));
             } else {
-                $search = $db->quote('%' . str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
+                $search = $db->quote('%' . str_replace(' ', '%', $db->escape(trim((string) $search), true) . '%'));
                 if ($frontend) {
                     $query->where('(user.name LIKE ' . $search . ' OR a.alias LIKE ' . $search . ')');
                 } else {
@@ -264,7 +250,7 @@ class VolunteersModel extends ListModel
 
         try {
             $db->execute();
-        } catch (JDatabaseExceptionExecuting $e) {
+        } catch (ExecutionFailureException $e) {
             throw new Exception(500, $e->getMessage());
         }
 

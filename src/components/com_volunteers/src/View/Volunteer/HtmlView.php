@@ -35,7 +35,7 @@ class HtmlView extends BaseHtmlView
     protected mixed $state;
     protected mixed $item;
     protected mixed $form;
-    protected User|null $user;
+    protected User|null $user = null;
 
     protected string $share;
 
@@ -53,6 +53,7 @@ class HtmlView extends BaseHtmlView
         /** @var VolunteerModel $model */
 
         $model = $this->getModel();
+        $model->setUseExceptions(true);
 
 
         $this->item = $model->getItem();

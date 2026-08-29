@@ -53,6 +53,7 @@ class HtmlView extends BaseHtmlView
         /** @var HomeModel $model */
 
         $model         = $this->getModel();
+        $model->setUseExceptions(true);
         $this->reports = $model->getLatestReports();
         $this->markers = $model->getMapMarkers();
 

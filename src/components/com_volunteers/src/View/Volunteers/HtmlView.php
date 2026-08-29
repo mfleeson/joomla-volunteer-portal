@@ -56,6 +56,7 @@ class HtmlView extends BaseHtmlView
         /** @var VolunteersModel $model */
 
         $model       = $this->getModel();
+        $model->setUseExceptions(true);
         $this->state = $model->getState();
         $this->items = $model->getItems();
 

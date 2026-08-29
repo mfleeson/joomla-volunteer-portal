@@ -153,7 +153,7 @@ class PositionModel extends AdminModel
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
 
-        $table->set('title', htmlspecialchars_decode($table->get('title'), ENT_QUOTES));
+        $table->set('title', htmlspecialchars_decode((string) $table->get('title'), ENT_QUOTES));
         $table->set('alias', ApplicationHelper::stringURLSafe($table->get('alias')));
 
         if (empty($table->get('alias'))) {
@@ -201,8 +201,8 @@ class PositionModel extends AdminModel
         $app = Factory::getApplication();
 
         // Alter the title for save as copy
-        if ($app->input->get('task') == 'save2copy') {
-            list($name, $alias) = $this->generateNewTitle(0, $data['alias'], $data['title']);
+        if ($app->getInput()->get('task') == 'save2copy') {
+            [$name, $alias] = $this->generateNewTitle(0, $data['alias'], $data['title']);
             $data['title']      = $name;
             $data['alias']      = $alias;
             $data['state']      = 0;

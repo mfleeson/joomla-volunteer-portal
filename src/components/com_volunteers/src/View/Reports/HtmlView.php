@@ -35,7 +35,7 @@ class HtmlView extends BaseHtmlView
     protected Pagination $pagination;
     protected mixed $state;
 
-    protected User|null $user;
+    protected User|null $user = null;
 
     protected mixed $category;
 
@@ -55,6 +55,7 @@ class HtmlView extends BaseHtmlView
         /** @var ReportsModel $model */
 
         $model            = $this->getModel();
+        $model->setUseExceptions(true);
         $this->state      = $model->getState();
         $this->items      = $model->getItems();
         $this->pagination = $model->getPagination();

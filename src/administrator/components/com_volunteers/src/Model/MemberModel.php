@@ -198,7 +198,7 @@ class MemberModel extends AdminModel
      *
      * @param   null  $pk  The id of the primary key.
      *
-     * @return CMSObject|bool Object on success
+     * @return stdClass|bool Object on success
      *
      * @since  4.0.0
      * @throws Exception

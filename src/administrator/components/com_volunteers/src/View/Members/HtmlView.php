@@ -51,6 +51,7 @@ class HtmlView extends BaseHtmlView
     {
         /** @var MembersModel $model */
         $model               = $this->getModel();
+        #$this->setUseExceptions(true);
         $this->state         = $model->getState();
         $this->items         = $model->getItems();
         $this->pagination    = $model->getPagination();
@@ -78,8 +79,9 @@ class HtmlView extends BaseHtmlView
         $canDo = ContentHelper::getActions('com_volunteers');
         $user  = $this->getCurrentUser();
         ToolbarHelper::title(Text::_('COM_VOLUNTEERS') . ': ' . Text::_('COM_VOLUNTEERS_TITLE_MEMBERS'), 'joomla');
+        $toolbar = $this->getDocument()->getToolbar();
         if ($canDo->get('core.create')) {
-            ToolbarHelper::addNew('member.add');
+            $toolbar->addNew('member.add');
         }
 
         if ($canDo->get('core.edit')) {
@@ -92,7 +94,7 @@ class HtmlView extends BaseHtmlView
         }
 
         if ($user->authorise('core.admin', 'com_volunteers') || $user->authorise('core.options', 'com_volunteers')) {
-            ToolbarHelper::preferences('com_volunteers');
+            $toolbar->preferences('com_volunteers');
         }
     }
 }
