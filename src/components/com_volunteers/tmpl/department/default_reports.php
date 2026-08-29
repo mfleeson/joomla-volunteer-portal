@@ -35,7 +35,7 @@ use Joomla\Component\Volunteers\Site\Helper\VolunteersHelper;
                 <div class="col-2 volunteer-image">
                     <a
                         href="<?php echo Route::_('index.php?option=com_volunteers&view=volunteer&id=' . $report->volunteer_id) ?>">
-                        <?php echo VolunteersHelper::image($report->volunteer_image, 'large', false, is_null($report->volunteer_name) ? '' : $report->volunteer_name); ?>
+                        <?php echo VolunteersHelper::image($report->volunteer_image, 'large', false, $report->volunteer_name ?? ''); ?>
                     </a>
                 </div>
                 <div class="col-10">

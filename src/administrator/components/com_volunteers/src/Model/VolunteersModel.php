@@ -87,7 +87,7 @@ class VolunteersModel extends ListModel
 
         // Join over the users for the related user.
         $query
-            ->select('user.name AS name, user.username AS user_username, user.email AS user_email')
+            ->select('user.name AS name, user.username AS user_username, user.email AS user_email, user.registerDate as registerDate')
             ->join('LEFT', '#__users AS ' . $db->quoteName('user') . ' ON user.id = a.user_id');
 
         // Self-join to count teams involved.
@@ -105,10 +105,10 @@ class VolunteersModel extends ListModel
         $search = $this->getState('filter.search');
 
         if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
+            if (stripos((string) $search, 'id:') === 0) {
+                $query->where('a.id = ' . (int) substr((string) $search, 3));
             } else {
-                $search = $db->quote('%' . str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
+                $search = $db->quote('%' . str_replace(' ', '%', $db->escape(trim((string) $search), true) . '%'));
                 if ($frontend) {
                     $query->where('(user.name LIKE ' . $search . ' OR a.alias LIKE ' . $search . ')');
                 } else {
@@ -134,11 +134,11 @@ class VolunteersModel extends ListModel
         }
 
         // Filter by image
-        /*$image = $this->getState('filter.image');
+        $image = $this->getState('filter.image');
 
         if ($image) {
             $query->where('a.image <> \'\'');
-        }*/
+        }
 
         // Filter by joomlastory
         $joomlastory = $this->getState('filter.joomlastory');
@@ -166,8 +166,8 @@ class VolunteersModel extends ListModel
         $query->group('a.id');
 
         // Add the list ordering clause.
-        $orderCol  = $this->state->get('list.ordering', 'user.name');
-        $orderDirn = $this->state->get('list.direction', 'asc');
+        $orderCol  = $this->getState('list.ordering', 'user.name');
+        $orderDirn = $this->getState('list.direction', 'asc');
 
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 

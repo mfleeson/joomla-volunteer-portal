@@ -47,6 +47,7 @@ class HtmlView extends BaseHtmlView
     {
         /** @var RegistrationModel $model */
         $model = $this->getModel();
+        $model->setUseExceptions(true);
 
         $this->data   = $model->getData();
         $this->form   = $model->getForm();

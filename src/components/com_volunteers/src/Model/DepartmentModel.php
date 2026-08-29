@@ -412,8 +412,8 @@ class DepartmentModel extends AdminModel
         $app = Factory::getApplication();
 
         // Alter the title for save as copy
-        if ($app->input->get('task') == 'save2copy') {
-            list($name, $alias) = $this->generateNewTitle(0, $data['alias'], $data['title']);
+        if ($app->getInput()->get('task') == 'save2copy') {
+            [$name, $alias] = $this->generateNewTitle(0, $data['alias'], $data['title']);
             $data['title']      = $name;
             $data['alias']      = $alias;
             $data['state']      = 0;
@@ -454,7 +454,7 @@ class DepartmentModel extends AdminModel
      *
      * @param   integer  $pk  The id of the primary key.
      *
-     * @return  CMSObject|boolean  Object on success, false on failure.
+     * @return  stdClass|boolean  Object on success, false on failure.
      *
      * @since  4.0.0
      * @throws Exception

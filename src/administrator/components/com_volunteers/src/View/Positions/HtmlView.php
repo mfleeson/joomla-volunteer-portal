@@ -56,7 +56,7 @@ class HtmlView extends BaseHtmlView
     /**
      * Form object for search filters
      *
-     * @var  \Joomla\CMS\Form\Form
+     * @var Form
      */
     public Form $filterForm;
 
@@ -90,6 +90,7 @@ class HtmlView extends BaseHtmlView
     {
         /** @var PositionsModel $model */
         $model               = $this->getModel();
+        #$this->setUseExceptions(true);
         $this->state         = $model->getState();
         $this->items         = $model->getItems();
         $this->pagination    = $model->getPagination();

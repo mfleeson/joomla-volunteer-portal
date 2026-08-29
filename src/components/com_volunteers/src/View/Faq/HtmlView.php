@@ -51,6 +51,7 @@ class HtmlView extends BaseHtmlView
         /** @var FaqModel $model */
 
         $model         = $this->getModel();
+        $model->setUseExceptions(true);
 
         $errors = $model->getErrors();
         if ($errors && count($errors) > 0) {

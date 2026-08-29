@@ -147,7 +147,7 @@ class VolunteerModel extends AdminModel
 
                 // Make sure we have http:// or https://
                 if ($data->website) {
-                    $data->website = parse_url($data->website, PHP_URL_SCHEME) == '' ? 'http://' . $data->website : $data->website;
+                    $data->website = parse_url((string) $data->website, PHP_URL_SCHEME) == '' ? 'http://' . $data->website : $data->website;
                 }
 
                 return $data;
@@ -256,31 +256,14 @@ class VolunteerModel extends AdminModel
         // Check the url fields
         foreach ($data as $field => $value) {
             if (in_array($field, $this->url_fields)) {
-                switch ($field) {
-                    case 'github':
-                        $url = 'https://github.com/' . $value;
-                        break;
-
-                    case 'twitter':
-                        $url = 'https://twitter.com/' . $value;
-                        break;
-
-                    case 'certification':
-                        $url = 'https://exam.joomla.org/directory/user/' . $value;
-                        break;
-
-                    case 'joomladocs':
-                        $url = 'https://docs.joomla.org/User:' . $value;
-                        break;
-
-                    case 'crowdin':
-                        $url = 'https://crowdin.com/profile/' . $value;
-                        break;
-
-                    default:
-                        $url = $value;
-                        break;
-                }
+                $url = match ($field) {
+                    'github' => 'https://github.com/' . $value,
+                    'twitter' => 'https://twitter.com/' . $value,
+                    'certification' => 'https://exam.joomla.org/directory/user/' . $value,
+                    'joomladocs' => 'https://docs.joomla.org/User:' . $value,
+                    'crowdin' => 'https://crowdin.com/profile/' . $value,
+                    default => $value,
+                };
 
                 if ($value) {
                     try {
@@ -289,8 +272,8 @@ class VolunteerModel extends AdminModel
                         } else {
                             $this->checkLink($url);
                         }
-                    } catch (RuntimeException $e) {
-                        throw new Exception(sprintf('COM_VOLUNTEERS_ERROR_URL_INVALID', $url, ucfirst($field)));
+                    } catch (RuntimeException) {
+                        throw new Exception(sprintf('COM_VOLUNTEERS_ERROR_URL_INVALID', $url, ucfirst((string) $field)));
                     }
                 }
             }
@@ -302,8 +285,8 @@ class VolunteerModel extends AdminModel
         $dataUser = [
             'name'      => $data['name'],
             'username'  => PunycodeHelper::emailToPunycode($data['email']),
-            'password'  => (isset($data['password1'])) ? $data['password1'] : '',
-            'password2' => (isset($data['password2'])) ? $data['password2'] : '',
+            'password'  => $data['password1'] ?? '',
+            'password2' => $data['password2'] ?? '',
             'email'     => PunycodeHelper::emailToPunycode($data['email']),
         ];
 
@@ -364,12 +347,12 @@ class VolunteerModel extends AdminModel
         try {
             $http     = HttpFactory::getHttp();
             $response = $http->get($url, [], 5);
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException) {
             $response = null;
         }
 
         // Check for error text (most likely this will break at some point in the future...)
-        if ((str_contains($response->body, 'You do not have any certifications.'))) {
+        if ((str_contains((string) $response->body, 'You do not have any certifications.'))) {
             throw new RuntimeException();
         }
 
@@ -394,7 +377,7 @@ class VolunteerModel extends AdminModel
 
         try {
             $response = HttpFactory::getHttp($options)->get($url, [], 5);
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException) {
             $response = null;
         }
 
@@ -433,9 +416,8 @@ class VolunteerModel extends AdminModel
 
         if (!is_null($id)) {
             return $id;
-        } else {
-            return -1;
         }
+        return -1;
     }
 
     /**

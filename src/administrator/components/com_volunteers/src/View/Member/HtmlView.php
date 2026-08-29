@@ -46,6 +46,7 @@ class HtmlView extends BaseHtmlView
     {
         /* @var MemberModel $model */
         $model = $this->getModel();
+        #$this->setUseExceptions(true);
 
         $this->state = $model->getState();
         $this->item  = $model->getItem();
@@ -80,28 +81,29 @@ class HtmlView extends BaseHtmlView
 
         // Set toolbar title
         ToolbarHelper::title($isNew ? Text::_('COM_VOLUNTEERS') . ': ' . Text::_('COM_VOLUNTEERS_TITLE_MEMBERS_NEW') : Text::_('COM_VOLUNTEERS') . ': ' . Text::_('COM_VOLUNTEERS_TITLE_MEMBERS_EDIT'), 'joomla');
+        $toolbar = $this->getDocument()->getToolbar();
 
         if (!$checkedOut && ($canDo->get('core.edit') || $canDo->get('core.create'))) {
-            ToolbarHelper::apply('member.apply');
-            ToolbarHelper::save('member.save');
+            $toolbar->apply('member.apply');
+            $toolbar->save('member.save');
         }
 
         if (!$checkedOut && $canDo->get('core.create')) {
-            ToolbarHelper::save2new('member.save2new');
+            $toolbar->save2new('member.save2new');
         }
 
         if (!$isNew && $canDo->get('core.create')) {
-            ToolbarHelper::save2copy('member.save2copy');
+            $toolbar->save2copy('member.save2copy');
         }
 
         if (empty($this->item->id)) {
-            ToolbarHelper::cancel('member.cancel');
+            $toolbar->cancel('member.cancel');
         } else {
             if ($this->state->params->get('save_history', 0) && $user->authorise('core.edit')) {
-                ToolbarHelper::versions('com_volunteers.member', $this->item->id);
+                $toolbar->versions('com_volunteers.member', $this->item->id);
             }
 
-            ToolbarHelper::cancel('member.cancel', 'JTOOLBAR_CLOSE');
+            $toolbar->cancel('member.cancel', 'JTOOLBAR_CLOSE');
         }
     }
 }

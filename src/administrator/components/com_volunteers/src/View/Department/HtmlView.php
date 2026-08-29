@@ -46,6 +46,7 @@ class HtmlView extends BaseHtmlView
     {
         /** @var DepartmentModel $model */
         $model       = $this->getModel();
+        #$this->setUseExceptions(true);
         $this->state = $model->getState();
         $this->item  = $model->getItem();
         $this->form  = $model->getForm();
@@ -115,7 +116,7 @@ class HtmlView extends BaseHtmlView
                 }
             );
             if ($this->state->params->get('save_history', 0) && $user->authorise('core.edit')) {
-                ToolbarHelper::versions('com_volunteers.department', $this->item->id);
+                $toolbar->versions('com_volunteers.department', $this->item->id);
             }
             $toolbar->cancel('department.cancel');
         }

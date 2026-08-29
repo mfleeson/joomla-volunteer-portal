@@ -9,6 +9,8 @@
 
 namespace Joomla\Component\Volunteers\Administrator\View\Setupdemo;
 
+use Joomla\Component\Volunteers\Administrator\Model\SetupdemoModel;
+
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
@@ -76,6 +78,7 @@ class HtmlView extends BaseHtmlView
     {
         ToolBarHelper::title('Setup Demo Menu');
         $user = $this->getCurrentUser();
+        $toolbar = $this->getDocument()->getToolbar();
 
         if (
             $user->authorise('core.admin', 'com_volunteer')
@@ -84,7 +87,7 @@ class HtmlView extends BaseHtmlView
                 'com_volunteer'
             )
         ) {
-            ToolbarHelper::preferences('com_volunteer');
+            $toolbar->preferences('com_volunteer');
         }
     }
 
@@ -100,11 +103,14 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-        $this->state       = $this->get('State');
-        $this->item        = $this->get('Item');
+        /** @var SetupdemoModel $model */
+        $model = $this->getModel();
+        #$this->setUseExceptions(true);
+        $this->state       = $model->getState();
+        $this->item        = $model->getItem();
         $this->params      = ComponentHelper::getParams('com_volunteer');
         $app               = Factory::getApplication();
-        $input             = $app->input->getInputForRequestMethod();
+        $input             = $app->getInput()->getInputForRequestMethod();
         $this->task        = $input->get('task', '');
         $this->addToolbar();
         parent::display($tpl);

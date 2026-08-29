@@ -38,7 +38,7 @@ class HtmlView extends BaseHtmlView
     protected mixed $state;
     protected mixed $item;
     protected mixed $form;
-    protected User|null $user;
+    protected User|null $user = null;
     protected stdClass $acl;
 
     /**
@@ -56,6 +56,7 @@ class HtmlView extends BaseHtmlView
         /** @var BoardModel $model */
 
         $model      = $this->getModel();
+        $model->setUseExceptions(true);
         $this->item = $model->getBoardItem();
 
         $this->state         = $model->getState();
@@ -74,9 +75,6 @@ class HtmlView extends BaseHtmlView
         $errors = $model->getErrors();
         if ($errors && count($errors) > 0) {
             throw new GenericDataException(implode("\n", $errors));
-        }
-        if (count($errors = $this->get('Errors'))) {
-            throw new Exception(implode("\n", $errors), 500);
         }
 
 

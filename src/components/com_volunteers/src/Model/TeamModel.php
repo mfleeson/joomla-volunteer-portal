@@ -422,9 +422,7 @@ class TeamModel extends AdminModel
 
                 return $data;
             } catch (Exception $e) {
-                $this->setError($e);
-
-                return false;
+                throw new \Exception($e);
             }
         }
 

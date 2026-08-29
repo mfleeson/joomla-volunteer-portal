@@ -8,6 +8,8 @@
 
 namespace Joomla\Component\Volunteers\Administrator\View\Contact;
 
+use Joomla\Component\Volunteers\Administrator\Model\ContactModel;
+
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
@@ -43,14 +45,12 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
+        /** @var ContactModel $model */
+        $model = $this->getModel();
+        #$this->setUseExceptions(true);
         /** @var Form form */
-        $this->form       = $this->get('Form');
+        $this->form       = $model->getForm();
         $this->recipients = Factory::getApplication()->getSession()->get('volunteers.recipients');
-
-        // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
-            throw new Exception(implode("\n", $errors), 500);
-        }
 
         $this->addToolbar();
         parent::display($tpl);
@@ -72,11 +72,12 @@ class HtmlView extends BaseHtmlView
 
         // Set toolbar title
         ToolbarHelper::title(Text::_('COM_VOLUNTEERS') . ': ' . Text::_('COM_VOLUNTEERS_TITLE_CONTACT'), 'joomla');
+        $toolbar = $this->getDocument()->getToolbar();
 
         if ($canDo->get('core.manage')) {
-            ToolbarHelper::custom('contact.send', 'mail', 'mail', 'COM_VOLUNTEERS_CONTACT_SEND', false);
+            $toolbar->custom('contact.send', 'mail', 'mail', 'COM_VOLUNTEERS_CONTACT_SEND', false);
         }
 
-        ToolbarHelper::cancel('contact.cancel');
+        $toolbar->cancel('contact.cancel');
     }
 }

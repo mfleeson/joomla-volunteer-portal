@@ -79,6 +79,7 @@ class BoardModel extends AdminModel
 
         $model = $this->getMVCFactory()->createModel('Members', 'Administrator', ['ignore_request' => true]);
         $model->setState('filter.position', [11, 13]);
+        $model->setState('filter.state', 1);
 
         $items = $model->getItems();
 
@@ -91,18 +92,22 @@ class BoardModel extends AdminModel
 
         foreach ($items as $item) {
             switch ($item->role) {
+                case 33:
                 case 286:
                     $president['president-' . $item->volunteer_name . $item->date_ended] = $item;
                     break;
 
+                case 36:
                 case 287:
                     $vicepresident['vicepresident-' . $item->volunteer_name . $item->date_ended] = $item;
                     break;
 
+                case 35:
                 case 288:
                     $secretary['secretary-' . $item->volunteer_name . $item->date_ended] = $item;
                     break;
 
+                case 34:
                 case 289:
                     $treasurer['treasurer-' . $item->volunteer_name . $item->date_ended] = $item;
                     break;
@@ -299,8 +304,8 @@ class BoardModel extends AdminModel
         $app = Factory::getApplication();
 
         // Alter the title for save as copy
-        if ($app->input->get('task') == 'save2copy') {
-            list($name, $alias) = $this->generateNewTitle(0, $data['alias'], $data['title']);
+        if ($app->getInput()->get('task') == 'save2copy') {
+            [$name, $alias] = $this->generateNewTitle(0, $data['alias'], $data['title']);
             $data['title']      = $name;
             $data['alias']      = $alias;
             $data['state']      = 0;

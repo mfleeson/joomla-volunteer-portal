@@ -216,7 +216,7 @@ class TeamController extends FormController
 
         try {
             $coordinator = $db->setQuery($query)->loadObject();
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException) {
             $this->app->enqueueMessage(Text::_('JERROR_SENDING_EMAIL'), 'warning');
         }
 

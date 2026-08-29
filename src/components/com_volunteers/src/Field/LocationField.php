@@ -59,6 +59,6 @@ class LocationField extends TextField
         $html[] = '<input type="button" class="gllpSearchButton" style="display: none">';
         $html[] = '</div>';
 
-        return implode($html);
+        return implode('', $html);
     }
 }

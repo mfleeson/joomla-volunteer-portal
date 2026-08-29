@@ -91,7 +91,7 @@ class DepartmentTable extends Table implements VersionableTableInterface, Taggab
     public function check()
     {
         // check for valid name
-        if (trim($this->get('title')) == '') {
+        if (trim((string) ($this->title ?? null)) == '') {
             throw new Exception(Text::_('COM_VOLUNTEERS_ERR_TABLES_NAME'));
         }
 
@@ -102,23 +102,23 @@ class DepartmentTable extends Table implements VersionableTableInterface, Taggab
         $query = $db->getQuery(true)
             ->select($db->quoteName('id'))
             ->from($db->quoteName('#__volunteers_departments'))
-            ->where($db->quoteName('title') . ' = ' . $db->quote($this->get('title')));
+            ->where($db->quoteName('title') . ' = ' . $db->quote($this->title ?? null));
         $db->setQuery($query);
 
         $xid = (int) $db->loadResult();
 
-        if ($xid && $xid != (int) $this->get('id')) {
+        if ($xid && $xid != (int) ($this->id ?? null)) {
             throw new Exception(Text::_('COM_VOLUNTEERS_ERR_TABLES_NAME'));
         }
 
-        if (empty($this->get('alias'))) {
-            $this->set('alias', $this->get('title'));
+        if (empty($this->alias ?? null)) {
+            $this->alias = $this->title ?? null;
         }
 
-        $this->set('alias', ApplicationHelper::stringURLSafe($this->get('alias')));
+        $this->alias = ApplicationHelper::stringURLSafe($this->alias ?? null);
 
-        if (trim(str_replace('-', '', $this->get('alias'))) == '') {
-            $this->set('alias', Factory::getDate()->format("Y-m-d-H-i-s"));
+        if (trim(str_replace('-', '', $this->alias ?? null)) == '') {
+            $this->alias = Factory::getDate()->format("Y-m-d-H-i-s");
         }
 
         return true;
@@ -151,29 +151,29 @@ class DepartmentTable extends Table implements VersionableTableInterface, Taggab
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
 
-        $this->set('modified', $date->toSql());
+        $this->modified = $date->toSql();
 
         if ($this->getId()) {
             // Existing item
 
-            $this->set('modified_by', $user->id);
+            $this->modified_by = $user->id;
         } else {
             // New item. An item created and created_by field can be set by the user,
             // so we don't touch either of these if they are set.
-            if (!(int) $this->get('created')) {
-                $this->set('created', $date->toSql());
+            if (!(int) ($this->created ?? null)) {
+                $this->created = $date->toSql();
             }
 
-            if (empty($this->get('created_by'))) {
-                $this->set('created_by', $user->id);
+            if (empty($this->created_by ?? null)) {
+                $this->created_by = $user->id;
             }
         }
 
         // Verify that the alias is unique
-        $table = new DepartmentTable($this->getDbo());
+        $table = new DepartmentTable($this->getDatabase());
         //$table = Table::getInstance('Department', 'VolunteersTable');
 
-        if ($table->load(['alias' => $this->get('alias')]) && ($table->get('id') != $this->get('id') || $this->get('id') == 0)) {
+        if ($table->load(['alias' => $this->alias ?? null]) && ($table->get('id') != ($this->id ?? null) || ($this->id ?? null) == 0)) {
             throw new Exception(Text::_('COM_VOLUNTEERS_ERROR_UNIQUE_ALIAS'));
         }
 

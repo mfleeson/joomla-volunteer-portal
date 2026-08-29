@@ -103,21 +103,21 @@ class MemberTable extends Table implements VersionableTableInterface, TaggableTa
         $date = Factory::getDate();
         $user = $this->getCurrentUser();
 
-        $this->set('modified', $date->toSql());
+        $this->modified = $date->toSql();
 
         if ($this->getId()) {
             // Existing item
 
-            $this->set('modified_by', $user->id);
+            $this->modified_by = $user->id;
         } else {
             // New item. An item created and created_by field can be set by the user,
             // so we don't touch either of these if they are set.
-            if (!(int) $this->get('created')) {
-                $this->set('created', $date->toSql());
+            if (!(int) ($this->created ?? null)) {
+                $this->created = $date->toSql();
             }
 
-            if (empty($this->get('created_by'))) {
-                $this->set('created_by', $user->id);
+            if (empty($this->created_by ?? null)) {
+                $this->created_by = $user->id;
             }
         }
 
@@ -138,7 +138,7 @@ class MemberTable extends Table implements VersionableTableInterface, TaggableTa
 
         if ($public) {
             foreach ($vars as $key => $value) {
-                if (str_starts_with($key, '_')) {
+                if (str_starts_with((string) $key, '_')) {
                     unset($vars[$key]);
                 }
             }
